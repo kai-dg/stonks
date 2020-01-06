@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>STONKS</title>
+</head>
+<style>
+html, body {background: rgb(58, 58, 58);color: rgb(214, 214, 194);}
+td,th,tr {outline: 1px solid black;}
+</style>
+<body>
+        {% for ticker in context %}
+        <table>
+            <h1>{{ ticker }}</h1>
+            <p>Current Price: {{ context[ticker]['price'] }}</p>
+            <tr>
+                <th>date_bought</th>
+                <th>price_bought_at</th>
+                <th>amt</th>
+            </tr>
+            {% for date in context[ticker]['date_bought'] %}
+                <tr>
+                    <td>{{ date }}</td>
+                    <td>{{ context[ticker]['date_bought'][date]['pb'] }}</td>
+                    <td>{{ context[ticker]['date_bought'][date]['amt'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endfor %}
+</body>
+</html>
