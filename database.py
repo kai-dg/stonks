@@ -2,18 +2,11 @@
 """Contains functions and classes that reads or writes to the
 json database file.
 """
-import importlib
+import ujson as json
 import os
 ABSPATH = os.path.dirname(os.path.realpath(__file__))
 DATABASE = os.path.join(ABSPATH, ".stocks.json")
 
-
-# JSON Parser: built-in json as fallback if ujson cannot be imported
-ultrajson = importlib.util.find_spec("ujson")
-if ultrajson is None:
-    import json
-else:
-    import ujson as json
 
 class Price:
     __slots__ = ("name", "price",)
@@ -32,10 +25,19 @@ class TickerSet:
         self.amt = amt
 
 def read():
-    with open(DATABASE, "r") as f:
-        return json.load(f)
+    if os.path.exists(DATABASE):
+        with open(DATABASE, "r") as f:
+            data = json.load(f)
+    else:
+        with open(DATABASE, "w+") as f:
+            f.write("{}")
+            data = {}
+    return data
 
 def update_all(data):
+    """Args:
+        data (dict): Full dict of json data.
+    """
     with open(DATABASE, "w+") as f:
         json.dump(data, f)
 
@@ -48,7 +50,7 @@ def update(ticker):
         new_data = {"pb": ticker.pb, "amt": ticker.amt}
         data[ticker.name]["date_bought"][ticker.date_bought] = new_data
     elif isinstance(ticker, Price):
-        new_data = data[ticker.name]["price"] = ticker.price
-
+        data[ticker.name]["price"] = ticker.price
+        
     with open(DATABASE, "w+") as f:
         json.dump(data, f)

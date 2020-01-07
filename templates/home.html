@@ -8,23 +8,38 @@ html, body {background: rgb(58, 58, 58);color: rgb(214, 214, 194);}
 td,th,tr {outline: 1px solid black;}
 </style>
 <body>
-        {% for ticker in context %}
-        <table>
-            <h1>{{ ticker }}</h1>
-            <p>Current Price: {{ context[ticker]['price'] }}</p>
+    {% for ticker in context %}
+    <table>
+        <h1>{{ ticker }}</h1>
+        <p>Current Price: {{ context[ticker]['price'] }}</p>
+        <tr>
+            <th>date_bought</th>
+            <th>price_bought_at</th>
+            <th>amt</th>
+        </tr>
+        {% for date in context[ticker]['date_bought'] %}
             <tr>
-                <th>date_bought</th>
-                <th>price_bought_at</th>
-                <th>amt</th>
+                <td>{{ date }}</td>
+                <td>{{ context[ticker]['date_bought'][date]['pb'] }}</td>
+                <td>{{ context[ticker]['date_bought'][date]['amt'] }}</td>
             </tr>
-            {% for date in context[ticker]['date_bought'] %}
-                <tr>
-                    <td>{{ date }}</td>
-                    <td>{{ context[ticker]['date_bought'][date]['pb'] }}</td>
-                    <td>{{ context[ticker]['date_bought'][date]['amt'] }}</td>
-                </tr>
-            {% endfor %}
-        </table>
         {% endfor %}
+    </table>
+    {% endfor %}
+    <br>
+    <form action="" method="post">
+        <h1>Add Stocks</h1>
+        <br>
+        <label for="ticker">Ticker:</label>
+        <input type="text" name="ticker">
+        <label for="date_bought">Date Bought:</label>
+        <input type="text" name="date_bought">
+        <label for="amt"># of Shares:</label>
+        <input type="text" name="amt">
+        <label for="pb">Price Bought:</label>
+        <input type="text" name="pb">
+        <br>
+        <button name="submit" value="submit">Submit</button>
+    </form>
 </body>
 </html>
